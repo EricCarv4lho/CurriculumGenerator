@@ -12,21 +12,27 @@ namespace CurriculumGenerator.Services
 {
     public class CurriculumService
     {
-       
+
         private readonly PdfFont bold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
         public byte[] GenerateCurriculum(Curriculum curriculum)
         {
-          using var memoryStream = new MemoryStream();
+            using var memoryStream = new MemoryStream();
 
-            
+
             var pdfWriter = new PdfWriter(memoryStream);
             var pdfDoc = new PdfDocument(pdfWriter);
 
             Document document = new(pdfDoc, iText.Kernel.Geom.PageSize.A4);
 
-           
+
             document.Add(CreateHeaderTable(curriculum));
             document.Add(CreateCareerObjectiveSectionTable(curriculum));
+
+            if (curriculum.Experiences != null && curriculum.Experiences.Count > 0)
+            {
+                document.Add(CreateExperienceSectionTable(curriculum));
+            }
+
             document.Close();
 
             var result = memoryStream.ToArray();
@@ -35,41 +41,43 @@ namespace CurriculumGenerator.Services
         }
 
 
-        public Cell CreateCell(string text, int fontSize, int rowspan = 1, int colspan = 1)
+        private static Cell CreateCell(string text, int fontSize, int rowspan = 1, int colspan = 1)
         {
-            
+
             Cell cell = new(rowspan, colspan);
             cell.Add(
                 new Paragraph(text)
                 .SetFontSize(fontSize)
                 .SetBorder(Border.NO_BORDER)
-                
+
                 );
-            
-           
+
+
 
             return cell;
         }
 
-        public Table CreateHeaderTable(Curriculum curriculum)
+        private Table CreateHeaderTable(Curriculum curriculum)
         {
             Table tableHeader = new(12);
-            tableHeader.AddCell(CreateCell(curriculum.FullName, 20, 1,12).SetBorder(Border.NO_BORDER).SetFont(bold));
+            tableHeader.AddCell(CreateCell(curriculum.FullName, 20, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
             tableHeader.AddCell(CreateCell(curriculum.ProfessionalTitle, 12, 1, 12).SetBorder(Border.NO_BORDER));
             tableHeader.AddCell(CreateCell($"{curriculum.City}, {curriculum.State}", 12, 1, 6).SetBorder(Border.NO_BORDER));
             tableHeader.AddCell(CreateCell(curriculum.PhoneNumber, 12, 1, 6).SetBorder(Border.NO_BORDER));
 
             tableHeader.AddCell(CreateCell(curriculum.Email, 12, 1, 12).SetBorder(Border.NO_BORDER).SetFontColor(new DeviceRgb(0, 0, 238)));
+
+            if(curriculum.LinkedinLink != null)
             tableHeader.AddCell(CreateCell(curriculum.LinkedinLink, 12, 1, 12).SetBorder(Border.NO_BORDER).SetFontColor(new DeviceRgb(0, 0, 238)));
+            if(curriculum.GitHubLink != null)
             tableHeader.AddCell(CreateCell(curriculum.GitHubLink, 12, 1, 12).SetBorder(Border.NO_BORDER).SetFontColor(new DeviceRgb(0, 0, 238)));
 
-               
 
 
             return tableHeader;
         }
 
-        public Table CreateCareerObjectiveSectionTable(Curriculum curriculum)
+        private Table CreateCareerObjectiveSectionTable(Curriculum curriculum)
         {
             Table tableCareerObjectiveSection = new(12);
 
@@ -79,8 +87,37 @@ namespace CurriculumGenerator.Services
             return tableCareerObjectiveSection;
         }
 
-      
+        private Table CreateExperienceSectionTable(Curriculum curriculum)
+        {
+
+            var experiences = curriculum.Experiences;
+
+
+            Table tableExperienceSection = new(12);
+
+            tableExperienceSection.AddCell(CreateCell("Experiência", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
+
+            foreach (var experience in experiences)
+            {
+                string startDate = experience.StartDate.ToString("MM/yyyy");
+                string? endDate = experience.EndDate.HasValue ? experience.EndDate?.ToString("MM/yyyy") : "Atualmente";
+
+                tableExperienceSection.AddCell(CreateCell($"{experience.JobTitle} - {experience.CompanyName}", 12, 1, 12).SetBorder(Border.NO_BORDER));
+                tableExperienceSection.AddCell(CreateCell($"{startDate} - {endDate}", 8, 1, 12).SetBorder(Border.NO_BORDER));
+                tableExperienceSection.AddCell(CreateCell(experience.Description, 12, 1, 12).SetBorder(Border.NO_BORDER));
+            }
+
+            return tableExperienceSection;
+        }
+
+
+
 
 
     }
+
+
+
+
 }
+
