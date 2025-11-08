@@ -17,25 +17,7 @@ Este projeto é uma aplicação ASP.NET Core que permite gerar currículos em fo
 - **Endpoint**: `/api/curriculum/generate`
 - **Método**: `POST`
 - **Descrição**: Gera um currículo em PDF com os dados fornecidos.
-- **Corpo da Requisição**:
-  ```json
-  {
-  "fullName": "string",
-  "professionalTitle": "string",
-  "city": "string",
-  "state": "string",
-  "phoneNumber": "string",
-  "email": "string",
-  "linkedinLink": "string",
-  "gitHubLink": "string",
-  "careerObjective": "string",
-  "highlights": "string",
-  "experience": "string",
-  "skillSet": [
-    "string"
-  ]
-  }
-  
+
 Como Executar
 Clone o repositório:
 ```json
