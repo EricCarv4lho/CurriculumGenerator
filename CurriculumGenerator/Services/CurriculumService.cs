@@ -1,5 +1,4 @@
 ﻿using CurriculumGenerator.Entities;
-using iText.IO.Font;
 using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
@@ -7,7 +6,6 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
-using System.Runtime.CompilerServices;
 
 
 namespace CurriculumGenerator.Services
@@ -28,6 +26,7 @@ namespace CurriculumGenerator.Services
 
            
             document.Add(CreateHeaderTable(curriculum));
+            document.Add(CreateCareerObjectiveSectionTable(curriculum));
             document.Close();
 
             var result = memoryStream.ToArray();
@@ -68,6 +67,16 @@ namespace CurriculumGenerator.Services
 
 
             return tableHeader;
+        }
+
+        public Table CreateCareerObjectiveSectionTable(Curriculum curriculum)
+        {
+            Table tableCareerObjectiveSection = new(12);
+
+            tableCareerObjectiveSection.AddCell(CreateCell("Objetivo", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
+            tableCareerObjectiveSection.AddCell(CreateCell(curriculum.CareerObjective, 12, 1, 12).SetBorder(Border.NO_BORDER));
+
+            return tableCareerObjectiveSection;
         }
 
       
