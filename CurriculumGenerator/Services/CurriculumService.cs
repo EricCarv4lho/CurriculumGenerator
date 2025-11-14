@@ -33,6 +33,8 @@ namespace CurriculumGenerator.Services
                 document.Add(CreateExperienceSectionTable(curriculum));
             }
 
+            document.Add(CreateEducationSectionTable(curriculum));
+
             document.Close();
 
             var result = memoryStream.ToArray();
@@ -110,7 +112,31 @@ namespace CurriculumGenerator.Services
             return tableExperienceSection;
         }
 
+        private Table CreateEducationSectionTable(Curriculum curriculum)
+        {
 
+
+            Table tableEducation = new(12);
+            tableEducation.AddCell(CreateCell("Educação", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
+
+            foreach (var education in curriculum.EducationList)
+            {
+
+                string startDate = education.StartDate.ToString("MM/yyyy");
+                string? endDate = education.EndDate.HasValue ? education.EndDate?.ToString("MM/yyyy") : "Atualmente";
+
+
+                tableEducation.AddCell(CreateCell($"{education.Course} - {education.InstitutionName}", 12, 1, 12).SetBorder(Border.NO_BORDER));
+                tableEducation.AddCell(CreateCell($"{startDate} - {endDate}", 8, 1, 12).SetBorder(Border.NO_BORDER));
+
+            }
+
+
+            return tableEducation;
+        }
+
+
+      
 
 
 
