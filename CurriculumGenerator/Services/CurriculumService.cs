@@ -35,6 +35,12 @@ namespace CurriculumGenerator.Services
 
             document.Add(CreateEducationSectionTable(curriculum));
 
+            if (curriculum.Languages != null && curriculum.Languages.Count > 0)
+            {
+                document.Add(CreateLanguageSectionTable(curriculum));
+            }
+
+
             document.Close();
 
             var result = memoryStream.ToArray();
@@ -85,7 +91,7 @@ namespace CurriculumGenerator.Services
 
             tableCareerObjectiveSection.AddCell(CreateCell("Objetivo", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
             tableCareerObjectiveSection.AddCell(CreateCell(curriculum.CareerObjective, 12, 1, 12).SetBorder(Border.NO_BORDER));
-
+            tableCareerObjectiveSection.SetMarginTop(15);
             return tableCareerObjectiveSection;
         }
 
@@ -108,7 +114,7 @@ namespace CurriculumGenerator.Services
                 tableExperienceSection.AddCell(CreateCell($"{startDate} - {endDate}", 8, 1, 12).SetBorder(Border.NO_BORDER));
                 tableExperienceSection.AddCell(CreateCell(experience.Description, 12, 1, 12).SetBorder(Border.NO_BORDER));
             }
-
+            tableExperienceSection.SetMarginTop(15);
             return tableExperienceSection;
         }
 
@@ -131,12 +137,33 @@ namespace CurriculumGenerator.Services
 
             }
 
-
+            tableEducation.SetMarginTop(15);
             return tableEducation;
         }
 
 
-      
+        private Table CreateLanguageSectionTable(Curriculum curriculum)
+        {
+
+
+            Table tableLanguage = new(12);
+            tableLanguage.AddCell(CreateCell("Idiomas", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
+
+            foreach (var language in curriculum.Languages)
+            {
+
+
+
+                tableLanguage.AddCell(CreateCell($"{language.Name} {language.Proficiency}", 12, 1, 12).SetBorder(Border.NO_BORDER));
+
+            }
+
+            tableLanguage.SetMarginTop(15);
+            return tableLanguage;
+        }
+
+
+
 
 
 

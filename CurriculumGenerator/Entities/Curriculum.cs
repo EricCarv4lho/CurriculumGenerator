@@ -16,7 +16,8 @@
         public List<Experience> Experiences { get; set; } = [];
         public List<Education> EducationList { get; set; } = [];
 
-       
+        public List<Language> Languages { get; set; } = [];
+
         public List<string> SkillSet { get; set; } = [];
 
     }
