@@ -40,6 +40,8 @@ namespace CurriculumGenerator.Services
                 document.Add(CreateLanguageSectionTable(curriculum));
             }
 
+            document.Add(CreateSkillsSectionTable(curriculum));
+
 
             document.Close();
 
@@ -160,6 +162,28 @@ namespace CurriculumGenerator.Services
 
             tableLanguage.SetMarginTop(15);
             return tableLanguage;
+        }
+
+        private Table CreateSkillsSectionTable(Curriculum curriculum)
+        {
+
+
+            Table tableSkills= new(12);
+            tableSkills.AddCell(CreateCell("Habilidades", 16, 1, 12).SetBorder(Border.NO_BORDER).SetFont(bold));
+            var skillList = "";
+            foreach (var skill in curriculum.SkillSet)
+            {
+
+
+                skillList += skill + " | ";
+
+
+            }
+
+            tableSkills.AddCell(CreateCell(skillList, 12, 1, 12).SetBorder(Border.NO_BORDER));
+
+            tableSkills.SetMarginTop(15);
+            return tableSkills;
         }
 
 
